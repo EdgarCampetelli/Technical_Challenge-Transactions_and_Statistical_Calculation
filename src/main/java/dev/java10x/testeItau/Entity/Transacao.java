@@ -14,4 +14,9 @@ public class Transacao {
 
     private BigDecimal valor;
     private OffsetDateTime dataeHora;
+
+    @Override
+    public String toString(){
+        return "Valor: "+valor+"\nData e Hora: "+dataeHora;
+    }
 }

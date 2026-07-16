@@ -12,5 +12,10 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class TransacaoDTO {
     private BigDecimal valor;
-    private OffsetDateTime dataeHora;
+    private OffsetDateTime dataHora;
+
+    @Override
+    public String toString(){
+        return "Valor: "+valor+"\nData e Hora: "+dataHora;
+    }
 }

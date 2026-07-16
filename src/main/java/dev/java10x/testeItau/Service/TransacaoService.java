@@ -12,11 +12,11 @@ import java.time.OffsetDateTime;
 public class TransacaoService {
 
     public void validar(TransacaoDTO transacaoDTO){
-        if (transacaoDTO.getValor() != null && transacaoDTO.getDataeHora() != null){
+        if (transacaoDTO.getValor() != null && transacaoDTO.getDataHora() != null){
             if (transacaoDTO.getValor().compareTo(BigDecimal.ZERO) < 0){
                 throw new IllegalArgumentException("Error: Transacoes devem ser maior ou igual a 0");
             }
-            if (transacaoDTO.getDataeHora().isAfter(OffsetDateTime.now())){
+            if (transacaoDTO.getDataHora().isAfter(OffsetDateTime.now())){
                 throw new IllegalArgumentException("Error: Data de transacao errada");
             }
         }else {
