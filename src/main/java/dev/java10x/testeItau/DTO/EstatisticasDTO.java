@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class EstatisticasDTO {
     private long count;
-    private BigDecimal sum;
-    private BigDecimal avg;
-    private BigDecimal min;
-    private BigDecimal max;
+    private double sum;
+    private double avg;
+    private double min;
+    private double max;
 
 }

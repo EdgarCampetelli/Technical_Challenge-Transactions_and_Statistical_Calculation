@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class TransacaoRepository<T>{
@@ -14,6 +15,7 @@ public class TransacaoRepository<T>{
     public ArrayList<TransacaoDTO> list = new ArrayList<>();
 
     public ArrayList<TransacaoDTO> listar(){
+        System.out.println(OffsetDateTime.now());
         return list;
     }
 
@@ -30,32 +32,20 @@ public class TransacaoRepository<T>{
     }
 
     public EstatisticasDTO estatistica(OffsetDateTime horaAtual) {
-        EstatisticasDTO estatisticasDTO = new EstatisticasDTO();
 
-        Long count = list.stream().count();
-        estatisticasDTO.setCount(count);
+        if ( list.stream()
+                .filter(i-> i.getDataHora().isAfter(horaAtual) || i.getDataHora().isEqual(horaAtual))
+                .toList()
+                .isEmpty()){
 
-        BigDecimal sum = list.stream()
-                .map(TransacaoDTO::getValor)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        estatisticasDTO.setSum(sum);
+            return new EstatisticasDTO(0,0.0,0.0,0.0,0.0);
+        }
 
-        //avg
-        BigDecimal avg = list.stream()
-                .map(TransacaoDTO::getValor)
-                .reduce(BigDecimal.ZERO, BigDecimal::add).divide(BigDecimal.valueOf(list.size()));
-        estatisticasDTO.setAvg(avg);
+       final var listUmMin =  list.stream()
+               .filter(i-> i.getDataHora().isAfter(horaAtual) || i.getDataHora().isEqual(horaAtual))
+               .mapToDouble(i-> i.getValor().doubleValue())
+               .summaryStatistics();
 
-        BigDecimal min = list.stream()
-                .map(TransacaoDTO::getValor)
-                .min((n1,n2)-> n1.compareTo(n2)).orElse(BigDecimal.ZERO);
-        estatisticasDTO.setMin(min);
-
-        BigDecimal max = list.stream()
-                .map(TransacaoDTO::getValor)
-                .max((n1,n2)-> n1.compareTo(n2)).orElse(BigDecimal.ZERO);
-        estatisticasDTO.setMax(max);
-
-        return estatisticasDTO;
+        return new EstatisticasDTO(listUmMin.getCount(),listUmMin.getSum(),listUmMin.getAverage(),listUmMin.getMin(),listUmMin.getMax());
     }
 }

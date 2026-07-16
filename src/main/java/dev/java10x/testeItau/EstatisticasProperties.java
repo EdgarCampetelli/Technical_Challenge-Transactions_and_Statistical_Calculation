@@ -1,13 +1,8 @@
 package dev.java10x.testeItau;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
-@Component
-@Data
 @ConfigurationProperties(prefix = "estatistica")
-public class EstatisticasProperties {
-    private Integer sec;
+public record EstatisticasProperties(@DefaultValue("60") Integer sec){
 }

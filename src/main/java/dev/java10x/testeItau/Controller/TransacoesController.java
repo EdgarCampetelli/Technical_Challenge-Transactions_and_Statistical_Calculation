@@ -4,12 +4,14 @@ import dev.java10x.testeItau.DTO.TransacaoDTO;
 import dev.java10x.testeItau.Repository.TransacaoRepository;
 import dev.java10x.testeItau.Service.TransacaoService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/transacao")
@@ -19,8 +21,15 @@ public class TransacoesController {
     private final TransacaoRepository transacaoRepository;
 
     @GetMapping("/listar")
-    public ArrayList<TransacaoDTO> listar(){
-        return transacaoRepository.listar();
+    public ResponseEntity<?> listar(){
+        try {
+            log.info("Transacoes listadas");
+            return ResponseEntity.ok(transacaoRepository.listar());
+        }catch (Exception e){
+            log.error("Nao ha transacoes para serem listadas");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
     }
 
     @PostMapping("/criar")
@@ -28,10 +37,13 @@ public class TransacoesController {
         try {
             transacaoService.validar(body);
             transacaoRepository.salvar(body);
+            log.info("Transacao realizada");
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (IllegalArgumentException e){
+            log.error("Erro no corpo da requisicao");
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }catch (Exception e){
+            log.error("Erro no servico");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -40,11 +52,12 @@ public class TransacoesController {
     public ResponseEntity<?> deletar(){
         try{
             transacaoRepository.deletar();
+            log.info("Transacoes deletadas");
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e){
+            log.error("Erro ao deletar Transacoes");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
     };
 
 
