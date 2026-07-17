@@ -1,8 +1,12 @@
 package dev.java10x.testeItau.Controller;
 
+import dev.java10x.testeItau.Config.Docs.TransacaoControllerDoc;
 import dev.java10x.testeItau.DTO.TransacaoDTO;
 import dev.java10x.testeItau.Repository.TransacaoRepository;
 import dev.java10x.testeItau.Service.TransacaoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +19,7 @@ import java.util.ArrayList;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/transacao")
-public class TransacoesController {
+public class TransacoesController implements TransacaoControllerDoc {
 
     private final TransacaoService transacaoService;
     private final TransacaoRepository transacaoRepository;
